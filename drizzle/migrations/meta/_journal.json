@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791258136537,
+      "tag": "0000_membership_review_and_dam_locations",
+      "breakpoints": true
+    }
+  ]
+}
