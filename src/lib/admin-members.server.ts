@@ -31,7 +31,7 @@ export async function rejectMembership(applicationId: string, reviewerId: string
     .from("membership_applications")
     .update({ status: "rejected", reviewed_by: reviewerId, reviewed_at: new Date().toISOString() })
     .eq("id", applicationId)
-    .eq("status", "pending");
+    .in("status", ["pending", "approved"]);
   if (error) throw new Error(error.message);
 }
 

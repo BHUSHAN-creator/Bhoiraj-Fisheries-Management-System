@@ -67,18 +67,20 @@ type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (k: keyof typeof dict) =
 const I18nContext = createContext<Ctx | null>(null);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("en");
+  const [lang, setLangState] = useState<Lang>("mr");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const saved = window.localStorage.getItem("lang") as Lang | null;
+    const saved = window.localStorage.getItem("bms.language") as Lang | null;
     if (saved === "en" || saved === "hi" || saved === "mr") setLangState(saved);
   }, []);
+
+  useEffect(() => { document.documentElement.lang = lang; }, [lang]);
 
   const setLang = (l: Lang) => {
     setLangState(l);
     if (typeof window !== "undefined") {
-      window.localStorage.setItem("lang", l);
+      window.localStorage.setItem("bms.language", l);
       document.documentElement.lang = l;
     }
   };

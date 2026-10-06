@@ -7,6 +7,8 @@ import { generatePassword, ratePassword } from "@/lib/password";
 import { registerAccount, checkAvailability } from "@/lib/registration.functions";
 import { toast } from "sonner";
 import { z } from "zod";
+import { lovable } from "@/integrations/lovable";
+import { Button } from "@/components/ui/button";
 import {
   UserPlus, CheckCircle2, Eye, EyeOff, Sparkles, Copy, ShieldCheck, Wrench, Users, Search,
 } from "lucide-react";
@@ -45,7 +47,7 @@ const empty = {
 const memberSchema = z.object({
   full_name: z.string().trim().min(2, "Enter your name").max(100),
   phone: z.string().trim().regex(/^[0-9]{10}$/, "Mobile number must be 10 digits"),
-  email: z.string().trim().email("Enter a valid email").max(255),
+  email: z.string().trim().email("Enter a valid email").max(255).or(z.literal("")),
   aadhaar_number: z.string().trim().regex(/^$|^[0-9]{12}$/, "Aadhaar must be exactly 12 digits"),
   pan: z.string().trim().regex(/^$|^[A-Z]{5}[0-9]{4}[A-Z]$/, "PAN must look like ABCDE1234F"),
   dob: z.string().min(1, "Date of birth is required"),
@@ -238,7 +240,7 @@ function RegisterPage() {
             {!isStaff && <Field label="Father's / Husband's Name" value={form.father_husband_name} onChange={set("father_husband_name")} />}
             <Field label="Mobile Number *" value={form.phone} onChange={set("phone")} required inputMode="numeric" maxLength={10} placeholder="10 digits" autoComplete="tel" />
             {!isStaff && <Field label="Alternate Mobile Number" value={form.alt_phone} onChange={set("alt_phone")} inputMode="numeric" maxLength={10} placeholder="Optional — 10 digits" />}
-            <Field label="Email *" type="email" value={form.email} onChange={set("email")} required autoComplete="email" />
+            <Field label={isStaff ? "Email *" : "ईमेल (ऐच्छिक)"} type="email" value={form.email} onChange={set("email")} required={isStaff} autoComplete="email" />
             <Field
               label={isStaff ? "User ID * (used for login)" : "User ID (optional)"}
               value={form.user_handle}

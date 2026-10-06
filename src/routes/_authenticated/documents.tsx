@@ -54,16 +54,20 @@ function Documents() {
   }, [data, q, folder]);
 
   async function download(path: string, name: string) {
-    const { data: signed, error } = await supabase.storage.from("documents").createSignedUrl(path, 60 * 10);
-    if (error || !signed) {
+    if (!isAdmin) return;
+    const { data: blob, error } = await supabase.storage.from("documents").download(path);
+    if (error || !blob) {
       toast.error("Could not open this file.");
       return;
     }
     const a = document.createElement("a");
-    a.href = signed.signedUrl;
+    const url = URL.createObjectURL(blob);
+    a.href = url;
     a.download = name;
-    a.target = "_blank";
+    document.body.appendChild(a);
     a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   async function remove(id: string, path: string) {
@@ -145,13 +149,13 @@ function Documents() {
                     </div>
                   )}
                 </div>
-                <button
+                {isAdmin && <button
                   onClick={() => download(d.file_path, d.title ?? "document")}
                   className="rounded-md border border-border p-2 hover:bg-muted"
                   title="Download"
                 >
                   <Download className="h-4 w-4" />
-                </button>
+                </button>}
                 {isAdmin && (
                   <button
                     onClick={() => remove(d.id, d.file_path)}

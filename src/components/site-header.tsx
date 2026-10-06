@@ -20,7 +20,7 @@ const SOCIAL_ICONS: Record<string, typeof Facebook> = {
 };
 
 export function SiteHeader() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { user, isAdmin, signOut } = useAuth();
   const [open, setOpen] = useState(false);
 
@@ -34,9 +34,9 @@ export function SiteHeader() {
   const navItems = [
     { to: "/", label: t("nav.home") },
     { to: "/about", label: t("nav.about") },
-    { to: "/lakes-and-dams", label: "Lakes & Dams" },
-    { to: "/registered-members", label: "Members" },
-    { to: "/achievements", label: "Achievements" },
+    { to: "/lakes-and-dams", label: lang === "en" ? "Lakes & Dams" : lang === "hi" ? "झीलें और बांध" : "तलाव व धरणे" },
+    { to: "/registered-members", label: t("nav.members") },
+    { to: "/achievements", label: lang === "en" ? "Achievements" : lang === "hi" ? "उपलब्धियाँ" : "यशोगाथा" },
     { to: "/schemes", label: t("nav.schemes") },
     { to: "/contact", label: t("nav.contact") },
   ];
@@ -84,10 +84,10 @@ export function SiteHeader() {
 
           <div className="min-w-0 flex-1 text-center">
             <h1 className="font-display text-base font-extrabold leading-tight tracking-tight text-primary sm:text-xl md:text-[26px]">
-              {SITE.name}
+              {t("hero.title")}
             </h1>
             <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground sm:text-xs">
-              Fisheries Co-operative Society · मत्स्य व्यवसाय सहकारी संस्था
+              {lang === "en" ? "Fisheries Co-operative Society" : "मत्स्य व्यवसाय सहकारी संस्था"}
             </p>
           </div>
 
