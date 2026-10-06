@@ -7,6 +7,7 @@ import { HeroSlideshow } from "@/components/hero-slideshow";
 import { FaqSection } from "@/components/faq-section";
 import { GrievanceForm } from "@/components/grievance-form";
 import { SocietyEmblem } from "@/components/society-emblem";
+import { DamGallery } from "@/components/dam-gallery";
 import { SITE, SLOGANS, AIM, OBJECTIVES, ROADMAP, SCHEME_CARDS } from "@/lib/site";
 import { useAuth } from "@/lib/auth-context";
 import { useQuery } from "@tanstack/react-query";
@@ -242,6 +243,7 @@ function Home() {
       </section>
 
       {/* CTA + ROADMAP — hidden once the visitor is signed in */}
+      <DamGallery />
       {!user && (
         <>
           <section className="mx-auto max-w-7xl px-4">

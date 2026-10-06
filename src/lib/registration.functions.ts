@@ -8,7 +8,7 @@ const baseSchema = z.object({
   full_name: z.string().trim().min(2).max(100),
   surname: z.string().trim().max(60).optional().or(z.literal("")),
   phone: z.string().trim().regex(/^\d{10}$/),
-  email: z.string().trim().email().max(255),
+  email: z.string().trim().email().max(255).or(z.literal("")),
   password: z.string().min(9).max(72),
   user_handle: z.string().trim().max(32).optional().or(z.literal("")),
   invite_code: z.string().trim().max(40).optional().or(z.literal("")),
@@ -51,14 +51,16 @@ export const registerAccount = createServerFn({ method: "POST" })
   .inputValidator((input: RegisterInput) => baseSchema.parse(input))
   .handler(async ({ data }) => {
     const reg = await import("@/lib/registration.server");
-    const email = data.email.trim().toLowerCase();
+    const isStaff = data.role !== "member";
+    if (isStaff && !data.email) throw new Error("कर्मचारी खात्यासाठी ईमेल आवश्यक आहे.");
+    const publicEmail = data.email.trim().toLowerCase();
+    const email = publicEmail || `${data.phone}@members.bhoiraj.invalid`;
     const fullName = `${data.full_name} ${data.surname ?? ""}`.trim();
 
     if (await reg.findAuthUserByEmail(email)) {
       throw new Error(`Found: ${email} already has a login account. Sign in instead, or use a different email.`);
     }
 
-    const isStaff = data.role !== "member";
     const handle = data.user_handle?.trim().toLowerCase() || null;
 
     if (isStaff) {
@@ -83,7 +85,7 @@ export const registerAccount = createServerFn({ method: "POST" })
 
     try {
       if (isStaff) {
-        if (needsInvite && !(await reg.consumeInvite(data.invite_code!, staffRole, userId))) {
+        if (needsInvite && !(await reg.consumeInvite(data.invite_code ?? "", staffRole, userId))) {
           throw new Error("That invite code is not valid, has expired, or has already been used.");
         }
         await reg.grantRole(userId, staffRole);
@@ -102,11 +104,11 @@ export const registerAccount = createServerFn({ method: "POST" })
           surname: data.surname || null,
           phone: data.phone,
           alt_phone: data.alt_phone || null,
-          email,
+           email: publicEmail || null,
           aadhaar_number: data.aadhaar_number || null,
           pan: data.pan || null,
           eshram_number: data.eshram_number || null,
-          dob: data.dob!,
+           dob: data.dob ?? "",
           village: data.village || null,
           taluka: data.taluka || null,
           district: data.district || null,
@@ -127,6 +129,6 @@ export const registerAccount = createServerFn({ method: "POST" })
       ok: true as const,
       role: data.role,
       needsApproval: !isStaff,
-      loginId: handle ?? email,
+      loginId: handle ?? (publicEmail || data.phone),
     };
   });

@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Waves, Newspaper } from "lucide-react";
+import { DamGallery } from "@/components/dam-gallery";
 
 export const Route = createFileRoute("/lakes-and-dams")({
   head: () => ({
@@ -92,6 +93,7 @@ function LakesAndDams() {
           </div>
         )}
       </div>
+      <DamGallery />
       <SiteFooter />
     </div>
   );

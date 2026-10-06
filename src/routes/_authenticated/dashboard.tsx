@@ -246,7 +246,7 @@ function Stat({ icon, label, value, accent }: { icon: React.ReactNode; label: st
 
 function QuickCard({ to, title, desc, icon }: { to: string; title: string; desc: string; icon: React.ReactNode }) {
   return (
-    <Link to={to} className="group flex items-start gap-3 rounded-2xl border border-border bg-card p-5 transition duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-elev">
+    <Link to={to} search={title === "Publish photos" || title === "Publish photos & notices" ? { tab: "dams" } : {}} className="group flex items-start gap-3 rounded-2xl border border-border bg-card p-5 transition duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-elev">
       <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary transition group-hover:scale-110">{icon}</div>
       <div className="flex-1">
         <div className="flex items-center justify-between gap-2">

@@ -380,6 +380,8 @@ export type Database = {
           image_url: string | null
           is_published: boolean
           latest_news: string | null
+          location_name: string | null
+          map_url: string | null
           name: string
           taluka: string | null
           updated_at: string
@@ -396,6 +398,8 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean
           latest_news?: string | null
+          location_name?: string | null
+          map_url?: string | null
           name: string
           taluka?: string | null
           updated_at?: string
@@ -412,6 +416,8 @@ export type Database = {
           image_url?: string | null
           is_published?: boolean
           latest_news?: string | null
+          location_name?: string | null
+          map_url?: string | null
           name?: string
           taluka?: string | null
           updated_at?: string
