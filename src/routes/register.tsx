@@ -233,6 +233,19 @@ function RegisterPage() {
       </div>
 
       <form onSubmit={submit} className="mx-auto max-w-4xl px-4 py-8">
+        <Button type="button" variant="outline" disabled={busy} className="mb-5" onClick={async () => {
+          setBusy(true);
+          try {
+            const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: `${window.location.origin}/register` });
+            if (result.error) throw result.error;
+            if (!result.redirected) {
+              const { supabase } = await import("@/integrations/supabase/client");
+              const { data } = await supabase.auth.getUser();
+              if (data.user) setForm(f => ({ ...f, email: data.user?.email ?? f.email, full_name: data.user?.user_metadata?.full_name ?? f.full_name }));
+            }
+          } catch (error) { toast.error(error instanceof Error ? error.message : "Google नोंदणी अयशस्वी झाली."); }
+          finally { setBusy(false); }
+        }}>Google द्वारे नोंदणी करा</Button>
         <div className="rounded-3xl border border-border bg-card p-6 shadow-sm md:p-8">
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="Name *" value={form.full_name} onChange={set("full_name")} required autoComplete="given-name" />

@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { ShieldAlert, UserCheck, Image as ImageIcon, Trophy, Waves, Sparkles, Send, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
+  validateSearch: (search: Record<string, unknown>): { tab?: TabId } => ({ tab: TABS.some(t => t.id === search.tab) ? search.tab as TabId : undefined }),
   head: () => ({
     meta: [
       { title: "Admin Panel | Bhoiraj Matsya Sanstha" },
@@ -39,8 +40,9 @@ const TABS = [
 type TabId = (typeof TABS)[number]["id"];
 
 function Admin() {
-  const { isAdmin, loading } = useAuth();
-  const [tab, setTab] = useState<TabId>("approvals");
+  const { isAdmin, isSuperAdmin, loading } = useAuth();
+  const search = Route.useSearch();
+  const [tab, setTab] = useState<TabId>(search.tab ?? "approvals");
 
   if (loading) return <div className="p-10 text-center text-sm text-muted-foreground">Loading...</div>;
 
@@ -56,7 +58,7 @@ function Admin() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-3xl font-bold">Chairman Admin Panel</h1>
+        <h1 className="font-display text-3xl font-bold">{isSuperAdmin ? "प्रशासक नियंत्रण केंद्र" : "अध्यक्ष कार्यकक्ष"}</h1>
         <p className="text-sm text-muted-foreground">Full control — approvals, notifications, photos, dams and schemes, from anywhere.</p>
       </div>
 
@@ -297,12 +299,12 @@ function Approvals() {
                     <span>Village: {a.village ?? "—"}</span>
                   </div>
                 </div>
-                {a.status === "pending" && (
+                 {a.status !== "rejected" && (
                   <div className="flex gap-2">
-                    <button disabled={busy === a.id} onClick={() => decide(a, true)} className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50">
+                    {a.status === "pending" && <button disabled={busy === a.id} onClick={() => decide(a, true)} className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50">
                       Approve
-                    </button>
-                    <button disabled={busy === a.id} onClick={() => decide(a, false)} className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
+                    </button>}
+                    <button disabled={busy === a.id} onClick={() => { if (a.status !== "approved" || confirm("मंजुरी रद्द करून सदस्य यादीतून नाव काढायचे?")) void decide(a, false); }} className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-muted disabled:opacity-50">
                       Reject
                     </button>
                   </div>
@@ -520,7 +522,7 @@ function AchievementPanel() {
 
 function DamPanel() {
   const qc = useQueryClient();
-  const [form, setForm] = useState({ name: "", village: "", taluka: "", district: "", water_area: "", capacity: "", description: "", latest_news: "" });
+  const [form, setForm] = useState({ name: "", village: "", taluka: "", district: "", water_area: "", capacity: "", description: "", latest_news: "", location_name: "", map_url: "" });
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -532,13 +534,17 @@ function DamPanel() {
   async function add(e: React.FormEvent) {
     e.preventDefault();
     if (!form.name.trim()) return toast.error("Enter the dam / lake name");
+    if (form.map_url) {
+      try { const url = new URL(form.map_url); if (url.protocol !== "https:" || !["maps.app.goo.gl", "maps.google.com", "www.google.com", "google.com"].includes(url.hostname)) throw new Error(); }
+      catch { return toast.error("कृपया वैध Google Maps HTTPS लिंक द्या."); }
+    }
     setBusy(true);
     try {
       const image_url = file ? await uploadMedia(file, "dams") : null;
-      const { error } = await supabase.from("dams").insert({ ...form, image_url });
+      const { error } = await supabase.from("dams").insert({ ...form, map_url: form.map_url || null, image_url, is_published: true });
       if (error) throw error;
       toast.success("Dam information published");
-      setForm({ name: "", village: "", taluka: "", district: "", water_area: "", capacity: "", description: "", latest_news: "" });
+      setForm({ name: "", village: "", taluka: "", district: "", water_area: "", capacity: "", description: "", latest_news: "", location_name: "", map_url: "" });
       setFile(null);
       qc.invalidateQueries();
     } catch (err) {
@@ -563,6 +569,8 @@ function DamPanel() {
         <Input label="Water area" value={form.water_area} onChange={(e) => setForm({ ...form, water_area: e.target.value })} />
         <Input label="Capacity" value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} />
         <FileInput label="Photo" onChange={setFile} />
+        <Input label="स्थानाचे नाव" value={form.location_name} onChange={e => setForm({ ...form, location_name: e.target.value })} />
+        <Input label="Google Maps स्थान लिंक" type="url" value={form.map_url} onChange={e => setForm({ ...form, map_url: e.target.value })} />
         <Input label="Latest news" value={form.latest_news} onChange={(e) => setForm({ ...form, latest_news: e.target.value })} />
         <div className="md:col-span-2">
           <label className="text-xs font-medium">Description</label>
