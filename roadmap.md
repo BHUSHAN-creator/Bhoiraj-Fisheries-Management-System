@@ -1,9 +1,16 @@
-# Website completion
-- [ ] Marathi-first language, readable Devanagari fonts, localized public pages and forms.
-- [ ] Membership approval/rejection, optional email and Google registration.
-- [ ] Photo publishing with public dam gallery and map links.
-- [ ] Role dashboards and safe deletion/history controls.
-- [ ] Premium glass styling, motion, theme controls and branding.
-- [ ] Member view-only documents and Chairman downloads.
-- [ ] Feedback, visualization, storage/visitor controls and Chairman approval management.
-- [ ] Verify authenticated workflows and external OTP/email delivery.
+# Portal completion roadmap
+- [x] Keep Marathi as the first-render language and save the remaining full-site Marathi translation for implementation.
+- [ ] Add the supplied watermark as an adaptable site-wide visual and an admin-managed watermark setting.
+- [ ] Complete Marathi public pages, including About, Achievements, Schemes, Members, Contact, Lakes & Dams, Gallery and Documents.
+- [ ] Correct dashboard navigation so each action opens its requested section; provide distinct Chairman and Admin work areas.
+- [ ] Improve member list columns and designation editing; public directory exposes only name/designation (or signed-in member name/village), while privileged history remains restricted.
+- [ ] Keep member approval/rejection reliable and verify approved names and signed-in contact visibility without creating a real external Google account.
+- [ ] Consolidate dam data/media into one public entry; support image, map and 360-degree links, natural image sizing, and full-screen media viewing.
+- [ ] Make document, achievement, photo and other media previews open in a dedicated full view; keep member downloads blocked and audit reports login-gated.
+- [ ] Fix scheme links and role-specific actions; provide member Chairman contact and direct government-site access for staff.
+- [ ] Add manageable advertisements, social links, watermark, visitor/activity/storage controls and confirmation-protected deletion.
+- [ ] Translate member-specific notifications and ensure no member sees another member's history.
+- [ ] Apply accessible glass styling, motion, responsive media sizing and reduced-motion support using semantic theme tokens.
+- [ ] Inspect the email duplicate-account path and recent logs; preserve the Admin account's secure remote sign-in without bypassing account ownership.
+- [ ] Check database records and policies for leftovers/privacy exposure; do not clear production records without explicit confirmation.
+- [ ] Verify preview rendering and relevant public flows; report authenticated/provider-dependent checks that cannot be completed here.
