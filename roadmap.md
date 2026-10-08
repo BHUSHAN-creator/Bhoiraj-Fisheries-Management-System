@@ -1,5 +1,5 @@
 # Portal completion roadmap
-- [ ] Make Marathi the first-render language across public pages, shared navigation, forms and authenticated views; localize date/time display.
+- [x] Keep Marathi as the first-render language and save the remaining full-site Marathi translation for implementation.
 - [ ] Add the supplied watermark as an adaptable site-wide visual and an admin-managed watermark setting.
 - [ ] Complete Marathi public pages, including About, Achievements, Schemes, Members, Contact, Lakes & Dams, Gallery and Documents.
 - [ ] Correct dashboard navigation so each action opens its requested section; provide distinct Chairman and Admin work areas.
