@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep public informational pages as top-level routes and signed-in management tools under the existing `_authenticated` layout, so shared links remain public while sensitive controls stay session-gated.
