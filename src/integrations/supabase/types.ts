@@ -376,6 +376,7 @@ export type Database = {
           created_by: string | null
           description: string | null
           district: string | null
+          gallery_urls: string[]
           id: string
           image_url: string | null
           is_published: boolean
@@ -383,6 +384,7 @@ export type Database = {
           location_name: string | null
           map_url: string | null
           name: string
+          panorama_url: string | null
           taluka: string | null
           updated_at: string
           village: string | null
@@ -394,6 +396,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           district?: string | null
+          gallery_urls?: string[]
           id?: string
           image_url?: string | null
           is_published?: boolean
@@ -401,6 +404,7 @@ export type Database = {
           location_name?: string | null
           map_url?: string | null
           name: string
+          panorama_url?: string | null
           taluka?: string | null
           updated_at?: string
           village?: string | null
@@ -412,6 +416,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           district?: string | null
+          gallery_urls?: string[]
           id?: string
           image_url?: string | null
           is_published?: boolean
@@ -419,6 +424,7 @@ export type Database = {
           location_name?: string | null
           map_url?: string | null
           name?: string
+          panorama_url?: string | null
           taluka?: string | null
           updated_at?: string
           village?: string | null

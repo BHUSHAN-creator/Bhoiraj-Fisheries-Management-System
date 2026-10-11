@@ -55,6 +55,7 @@
     "date-fns": "^4.1.0",
     "docx": "^9.7.1",
     "embla-carousel-react": "^8.6.0",
+    "eventsource-parser": "^4.1.1",
     "input-otp": "^1.4.2",
     "jspdf": "^4.2.1",
     "lucide-react": "^0.575.0",
